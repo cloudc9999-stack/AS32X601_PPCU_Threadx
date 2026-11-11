@@ -19,6 +19,8 @@ TX_TIMER CG_sys_status_timer;
 /* ==================== 私有函数声明 ==================== */
 static uint32_t AP_CAN_ConnectionManagment(uint32_t *input, uint8_t *send_data, uint32_t data_DLC);
 static uint32_t AP_CAN_ControlCommand(uint32_t *input, uint8_t *send_data, uint32_t data_DLC);
+static void AP_CG_SlaveStatus(uint32_t status);
+
 /* ==================== 应用层APP初始化函数 ==================== */
 
 /* ==================== 应用层APP任务函数 ==================== */
