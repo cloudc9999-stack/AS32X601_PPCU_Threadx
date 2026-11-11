@@ -1,0 +1,101 @@
+version: "4.1"
+name: PPCU_Threadx
+type: RISC-V
+deviceName: null
+packDir: null
+srcDirs:
+  - Bsp
+  - Core
+  - Peripherals
+  - Startup
+  - User
+  - Threadx_common
+  - Threadx_ports
+virtualFolder:
+  name: <virtual_root>
+  files: []
+  folders: []
+dependenceList: []
+outDir: build
+miscInfo:
+  uid: f5c5134f55838284902bed27335e05f8
+targets:
+  Debug:
+    cppPreprocessAttrs:
+      defineList: []
+      incList:
+        - Core
+        - System
+        - User
+        - Peripherals/inc
+        - Peripherals/reg
+        - Core/inc
+        - Bsp/inc
+        - User/inc
+        - Threadx_common/inc
+        - Threadx_ports/inc
+        - Threadx_ports/common
+      libList: []
+    excludeList: []
+    settings:
+      debugger: cortex-debug
+    toolchain: RISCV_GCC
+    toolchainConfigMap:
+      RISCV_GCC:
+        linkerScriptPath: .eide/as32x601.ld
+        options:
+          version: 2
+          afterBuildTasks:
+            - name: new postbuild task
+              abortAfterFailed: false
+              command: 'echo "firmware: ${OutDir}/${ProjectName}.hex"'
+              disable: false
+          asm-compiler:
+            ASM_FLAGS: -Wl,-Bstatic
+          beforeBuildTasks:
+            - name: new prebuild task
+              abortAfterFailed: false
+              command: 'echo "project name: ${ProjectName}"'
+              disable: false
+              stopBuildAfterFailed: true
+          c/cpp-compiler:
+            C_FLAGS: -Wl,-Bstatic
+            language-c: c11
+            language-cpp: c++11
+            one-elf-section-per-data: true
+            one-elf-section-per-function: true
+            optimization: level-debug
+            warnings: all-warnings
+          global:
+            abi: ilp32d
+            arch: rv32imafdc
+            code-model: medlow
+            misc-control: --specs=nosys.specs --specs=nano.specs
+            output-debug-info: enable
+            stack-usage: true
+          linker:
+            $toolName: auto
+            LD_FLAGS: -Wl,--cref -Wl,--no-relax -nostartfiles
+            not-print-mem-usage: true
+            output-format: elf
+            remove-unused-input-sections: true
+    uploadConfigMap:
+      Custom:
+        bin: ${ExecutableName}.bin
+        commandLine: '%AS32_TOOLCHAIN_DIR%\flash_download.bat "${programFile}"'
+        eraseChipCommand: ""
+      JLink:
+        baseAddr: ""
+        bin: ""
+        cpuInfo:
+          cpuName: "null"
+          vendor: "null"
+        otherCmds: ""
+        proType: 1
+        speed: 8000
+      OpenOCD:
+        baseAddr: "0x01000000"
+        bin: ${ExecutableName}.bin
+        interface: ""
+        target: as32x601_eflash
+    uploader: OpenOCD

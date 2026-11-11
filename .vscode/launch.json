@@ -1,0 +1,74 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug AS32x601 (OpenOCD)",
+            "type": "cortex-debug",
+            "request": "attach",
+            "servertype": "openocd",
+            "svdFile":"${workspaceFolder}/As32x601.svd",
+            "gdbPath": "${env:USERPROFILE}\\.eide\\tools\\as32_gcc\\bin\\riscv-none-elf-gdb.exe",
+            "objdumpPath": "${env:USERPROFILE}\\.eide\\tools\\as32_gcc\\bin\\riscv-none-elf-objdump.exe",
+            "hardwareBreakpoints": {
+                "enabled": true,
+                "limit": 16
+            },
+            "openOCDPath": "${env:USERPROFILE}\\.eide\\tools\\openocd\\bin\\openocd.exe",
+            "configFiles": [
+                "${env:USERPROFILE}\\.eide\\tools\\openocd\\scripts\\target\\as32x601_eflash.cfg"
+            ],
+            "executable": "${workspaceFolder}/build/Debug/${workspaceFolderBasename}.elf",
+            "showDevDebugOutput": "raw",
+            "debuggerArgs": [
+                "-ex", "set remotetimeout 10",
+                "-ex", "set range-stepping on",
+                "-ex", "maintenance set dwarf index-cache enabled on",
+                "-ex", "set pagination off",
+                "-ex", "set print symbol-loading off"
+            ],
+            "overrideAttachCommands": [
+                "monitor gdb_breakpoint_override hard",
+                "monitor reset halt",
+                "monitor mww 0x30006014 0x00000FF5",
+                "monitor mww 0x3000601C 0x00000000",
+                "monitor mww 0x30006020 0x00200000",
+                "monitor mww 0x30006024 0x000A0000",
+                "monitor mww 0x30006028 0xF0000000",
+                "monitor mww 0x3000602C 0x20000000",
+                "monitor sleep 100",
+                "monitor mww 0x30006014 0x00000FFF",
+                "monitor mww 0x3000601C 0x00002AAA",
+                "monitor mww 0x30006020 0x002AAAAA",
+                "monitor mww 0x30006024 0x000FAAAA",
+                "monitor mww 0x30006028 0xFAAAAAAA",
+                "monitor mww 0x3000602C 0x2AAAAAAA",
+                "monitor sleep 100"
+            ],
+            "postStartSessionCommands": [
+                "thbreak main",
+                "continue"
+            ],
+            "postResetCommands": [
+                "monitor mww 0x30006014 0x00000FF5",
+                "monitor mww 0x3000601C 0x00000000",
+                "monitor mww 0x30006020 0x00200000",
+                "monitor mww 0x30006024 0x000A0000",
+                "monitor mww 0x30006028 0xF0000000",
+                "monitor mww 0x3000602C 0x20000000",
+                "monitor sleep 100",
+                "monitor mww 0x30006014 0x00000FFF",
+                "monitor mww 0x3000601C 0x00002AAA",
+                "monitor mww 0x30006020 0x002AAAAA",
+                "monitor mww 0x30006024 0x000FAAAA",
+                "monitor mww 0x30006028 0xFAAAAAAA",
+                "monitor mww 0x3000602C 0x2AAAAAAA",
+                "monitor sleep 100",
+                "thbreak main",
+                "continue"
+            ],
+            "liveWatch": {
+                "enabled": false
+            }
+        }
+    ]
+}
