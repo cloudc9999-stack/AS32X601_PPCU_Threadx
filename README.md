@@ -1,3 +1,4 @@
+PPCU控制
 1，编辑器平台选择VSCode EIDE编辑；
 
 2，MCU芯片选择AS32x601 32位RISC-V架构MCU，MCU的时钟频率为180MHz，内存大小为512KB，Flash大小为2MB；
